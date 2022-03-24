@@ -239,3 +239,8 @@ int main(int argc, char* argv[])
 
     return EXIT_SUCCESS;
 }
+
+
+
+// run script
+// g++ main.cpp -lGL -lglut -o main ./main
