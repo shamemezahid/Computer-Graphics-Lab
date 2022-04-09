@@ -220,8 +220,7 @@ static void myInit(void) {
 }
 /* Program entry point */
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]){
     glutInit(&argc, argv);
     glutInitWindowSize(W, H);
     glutInitWindowPosition(100, 10);
