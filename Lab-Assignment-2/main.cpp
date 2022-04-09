@@ -1,6 +1,7 @@
-// Computer Graphics : Lab Assignment - 2
+// Assignment 2
+// Computer Graphics Lab 
 // Shamim Bin Zahid 
-// Roll :  43
+// Roll 43
 
 
 #include <GL/glut.h>

@@ -1,22 +1,27 @@
+// Assignment 4
+// Computer Graphics Lab 
+// Shamim Bin Zahid 
+// Roll 43
+
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>
 #include <vector>
 #include<bits/stdc++.h>
+#define PI 3.14159265
+static int W=700;
+static int H=700;
+
 using namespace std;
+
 static void idle(void);
 void calcV();
-
-#define PI 3.14159265
 
 typedef struct{
     int x;
     int y;
 } Point;
-
-static int W=700;
-static int H=700;
 
 double P3D[8][3];
 int face[6][4] = {
@@ -27,13 +32,12 @@ int face[6][4] = {
     {1,5,6,2},
     {7,3,2,6}
 }; 
-//[4] will hold information about the corners for that face whereas [8] of p3d[8][3] holds the corner information
 
+// hardcoded for now
 double qdx = 0;
 double qdy = 0;
 double qdz = 300;
 double zp = -300;
-
 double s = 400;
 
 double angle_x_left = 0, angle_y_down = 0;
@@ -48,7 +52,7 @@ double N[3];
 vector<Point> P2D;
 
 /* GLUT callback Handlers */
-///
+
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -148,8 +152,7 @@ static void drawLine_3(int x0, int y0, int x1, int y1){
     }
     glEnd();
 }
-static void drawLine_4(int x0, int y0, int x1, int y1)
-{
+static void drawLine_4(int x0, int y0, int x1, int y1){
     int dx=x1-x0, dy=y1-y0,x=x0,y=y0;
     int delW=-2*dy, delSW=2*(-dy+dx), d=-2*dy+dx;
     glBegin(GL_POINTS);
@@ -191,6 +194,7 @@ static void drawLine_5(int x0, int y0, int x1, int y1){
     }
     glEnd();
 }
+
 static void drawLine_6(int x0, int y0, int x1, int y1){
     int dx=x1-x0, dy=y1-y0,x=x0,y=y0;
     int delS=2*dx, delSE=2*(dy+dx), d=dy+2*dx;
@@ -270,7 +274,6 @@ static void genP3D(double s){
         {-s, s, -s},
         {-s, s, s}
     };
-
     for(int i=0; i< 8; i++){
         for(int j=0; j<3; j++){
             P3D[i][j] = temp[i][j]/2;
@@ -337,11 +340,9 @@ void drawCube(){
         vect_A[0] = P3D[face[k][1]][0] - P3D[face[k][0]][0];
         vect_A[1] = P3D[face[k][1]][1] - P3D[face[k][0]][1];
         vect_A[2] = P3D[face[k][1]][2] - P3D[face[k][0]][2];
-
         vect_B[0] = P3D[face[k][3]][0] - P3D[face[k][0]][0];
         vect_B[1] = P3D[face[k][3]][1] - P3D[face[k][0]][1];
         vect_B[2] = P3D[face[k][3]][2] - P3D[face[k][0]][2];
-
         N[0] = vect_A[1] * vect_B[2] - vect_A[2] * vect_B[1];
         N[1] = vect_A[2] * vect_B[0] - vect_A[0] * vect_B[2];
         N[2] = vect_A[0] * vect_B[1] - vect_A[1] * vect_B[0];
@@ -349,7 +350,7 @@ void drawCube(){
         double dot_prod = 0;
         dot_prod = v[0]*N[0] + v[1]*N[1] + v[2]*N[2];
 
-        if(dot_prod>=s*130){
+        if(dot_prod>=s*130){ // only god knows why this condition works
             findanddrawline(P2D[face[k][0]].x, P2D[face[k][0]].y, P2D[face[k][1]].x, P2D[face[k][1]].y);
             findanddrawline(P2D[face[k][1]].x, P2D[face[k][1]].y, P2D[face[k][2]].x, P2D[face[k][2]].y);
             findanddrawline(P2D[face[k][2]].x, P2D[face[k][2]].y, P2D[face[k][3]].x, P2D[face[k][3]].y);
@@ -364,11 +365,9 @@ static void display(void){
         initialScreen = 0;
         calcV();
     }
-
     for (int i = 0; i<8; i++){
         P2D.push_back(cal2DFrom3D(P3D[i], q, -zp));
     }
-
     glClearColor(0,0,0,1);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -380,17 +379,16 @@ static void display(void){
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
-
+    // defining the light properties
     glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
+    // defining the material properties
     glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-
     const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;
 
@@ -408,7 +406,7 @@ static void SpecialKey(int key, int x, int y){
         if(angle_x_left == 0)
             angle_x_left = 360;
         else
-            angle_x_left = angle_x_left - 0.05;
+            angle_x_left = angle_x_left - 0.01;
         for(int i=0; i<8; i++){
             P3D[i][0] = P3D[i][0];
             tempY = round(cos(angle_x_left * PI / 180.0 )*P3D[i][1] - sin ( angle_x_left * PI / 180.0 )*P3D[i][2]);
@@ -421,7 +419,7 @@ static void SpecialKey(int key, int x, int y){
 
     case GLUT_KEY_DOWN :
         if(angle_x_right<360)
-            angle_x_right = angle_x_right + 0.1;
+            angle_x_right = angle_x_right + 0.01;
         else
             angle_x_right = 0;
         for(int i=0; i<8; i++){
@@ -438,7 +436,7 @@ static void SpecialKey(int key, int x, int y){
         if(angle_y_down == 0)
             angle_y_down = 360;
         else
-            angle_y_down = angle_y_down - 0.05;
+            angle_y_down = angle_y_down - 0.01;
         for(int i=0; i<8; i++){
             tempX = round(cos ( angle_y_down * PI / 180.0 )*P3D[i][0] + sin ( angle_y_down * PI / 180.0 )*P3D[i][2]);
             P3D[i][1] = P3D[i][1];
@@ -451,7 +449,7 @@ static void SpecialKey(int key, int x, int y){
 
     case GLUT_KEY_RIGHT :
         if(angle_y_up < 360)
-            angle_y_up = angle_y_up + 0.1;
+            angle_y_up = angle_y_up + 0.01;
         else
             angle_y_up = 0;
         for(int i=0; i<8; i++){
